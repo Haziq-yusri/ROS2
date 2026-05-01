@@ -4,6 +4,8 @@
 > **Versi ROS2:** Jazzy Jalisco  
 > **Sistem Operasi:** Windows 11 + WSL 2 (Ubuntu 24.04)
 
+> 📷 **Nota tentang imej:** Panduan ini merujuk kepada beberapa tangkap layar (screenshot) yang disimpan dalam folder [`images/`](./images/). Jika imej tidak dipaparkan, ia bermakna fail belum disumbangkan — sila rujuk [`images/README.md`](./images/README.md) untuk konvensyen penamaan dan cara menyumbang.
+
 ---
 
 ## Senarai Kandungan
@@ -36,6 +38,9 @@ Sebelum memulakan, pastikan komputer anda memenuhi keperluan berikut:
 3. Pastikan ia **Enabled (Diaktifkan)**.
 4. Simpan dan keluar dari BIOS.
 
+![Tetapan Virtualization di BIOS](images/01-bios-virtualization.png)
+*Rajah 1: Contoh tetapan **Virtualization Technology** diaktifkan di BIOS.*
+
 ---
 
 ## 2. Pasang WSL di Windows 11
@@ -46,6 +51,9 @@ Sebelum memulakan, pastikan komputer anda memenuhi keperluan berikut:
 2. Taip `PowerShell`.
 3. Klik kanan pada **Windows PowerShell** dan pilih **Run as administrator (Jalankan sebagai pentadbir)**.
 
+![Buka PowerShell sebagai pentadbir](images/02-powershell-admin.png)
+*Rajah 2.1: Pilihan **Run as administrator** dalam menu Start.*
+
 ### Langkah 2.2 — Pasang WSL dan Ubuntu 24.04
 
 Taip arahan berikut dalam PowerShell dan tekan `Enter`:
@@ -55,6 +63,9 @@ wsl --install -d Ubuntu-24.04
 ```
 
 > **Nota:** Arahan ini akan memasang WSL 2 dan Ubuntu 24.04 secara automatik. Proses ini memerlukan sambungan internet dan mungkin mengambil masa beberapa minit.
+
+![Pemasangan WSL dan Ubuntu](images/02-wsl-install.png)
+*Rajah 2.2: Output PowerShell semasa `wsl --install -d Ubuntu-24.04` dijalankan.*
 
 ### Langkah 2.3 — Mulakan Semula Komputer
 
@@ -85,6 +96,9 @@ Anda sepatutnya melihat output seperti ini:
   NAME            STATE           VERSION
 * Ubuntu-24.04    Running         2
 ```
+
+![Output wsl --list --verbose](images/02-wsl-list-verbose.png)
+*Rajah 2.5: Pengesahan Ubuntu-24.04 berjalan pada WSL versi 2.*
 
 Pastikan **VERSION** adalah **2**. Jika tidak, jalankan:
 
@@ -194,6 +208,9 @@ Jika pemasangan berjaya, Terminal 2 akan memaparkan mesej yang diterima daripada
 [INFO] [1234567890.000]: I heard: [Hello World: 2]
 ```
 
+![Talker dan Listener berkomunikasi](images/03-talker-listener.png)
+*Rajah 3.9: Dua terminal — `talker` (kiri) menghantar mesej, `listener` (kanan) menerima mesej.*
+
 Tekan `Ctrl+C` untuk hentikan kedua-dua proses.
 
 ---
@@ -235,6 +252,9 @@ BUSID  VID:PID    DEVICE                                                        
 2-3    0483:5740  STMicroelectronics Virtual COM Port (COM4)                    Not shared
 ```
 
+![Output usbipd list](images/04-usbipd-list.png)
+*Rajah 4.3: Senarai peranti USB yang dikesan oleh `usbipd`.*
+
 ### Langkah 4.4 — Kongsi (Share) Peranti USB
 
 Kongsi peranti yang ingin digunakan (gantikan `1-1` dengan BUSID peranti anda):
@@ -248,6 +268,9 @@ usbipd bind --busid 1-1
 ```powershell
 usbipd attach --wsl --busid 1-1
 ```
+
+![usbipd attach ke WSL](images/04-usbipd-attach.png)
+*Rajah 4.5: Peranti USB berjaya disambungkan ke WSL.*
 
 ### Langkah 4.6 — Sahkan Sambungan di WSL
 
@@ -357,6 +380,12 @@ ros2 launch slam_toolbox online_async_launch.py \
 source ~/.bashrc
 ros2 launch nav2_bringup rviz_launch.py
 ```
+
+![Gazebo TurtleBot3](images/05-gazebo-turtlebot3.png)
+*Rajah 5.4a: Simulasi TurtleBot3 dalam Gazebo.*
+
+![RViz SLAM](images/05-rviz-slam.png)
+*Rajah 5.4b: RViz memaparkan peta SLAM yang sedang dibina secara langsung.*
 
 ### Langkah 5.5 — Gerakan Robot untuk Membina Peta
 
@@ -512,6 +541,9 @@ Windows Firewall mungkin menyekat komunikasi ROS2. Untuk membenarkan komunikasi:
 6. Klik **Finish**.
 
 Ulang untuk **Outbound Rules**.
+
+![Peraturan Firewall ROS2 DDS](images/06-firewall-rule.png)
+*Rajah 6.8: Menambah peraturan UDP 7400-7999 dalam Windows Defender Firewall.*
 
 > **Nota:** Julat port `7400-7999` merangkumi port standard yang digunakan oleh pelbagai implementasi DDS (termasuk FastDDS dan Cyclone DDS). Pastikan kedua-dua peraturan masuk (Inbound) dan keluar (Outbound) ditetapkan.
 
